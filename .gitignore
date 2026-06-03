@@ -1,0 +1,17 @@
+node_modules
+dist
+.DS_Store
+*.local
+*.log
+*.zip
+.env
+.env.*
+output/
+docs/
+.kilo/
+ts_check.txt
+ts_errors.txt
+
+reference/
+omni-gen/
+CODE_WIKI.md
