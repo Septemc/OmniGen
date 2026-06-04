@@ -40,6 +40,7 @@ function toggle() {
   cursor: pointer;
   user-select: none;
   transition: background 0.15s;
+  min-height: 48px;
 }
 
 .section-header:hover {
@@ -64,5 +65,15 @@ function toggle() {
 
 .section-content {
   padding: 0 20px 16px 20px;
+}
+
+@media (max-width: 767px) {
+  .section-header {
+    padding: 12px 16px;
+  }
+
+  .section-content {
+    padding: 0 16px 12px 16px;
+  }
 }
 </style>

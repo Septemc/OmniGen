@@ -3,18 +3,36 @@
     <div class="app-shell">
       <header class="app-header">
         <div class="header-left">
+          <button
+            class="hamburger-btn"
+            @click="menuOpen = !menuOpen"
+            aria-label="菜单"
+          >
+            {{ menuOpen ? '✕' : '☰' }}
+          </button>
           <h1 class="app-title">
             <span class="logo">🎨</span>
             OmniGen
           </h1>
         </div>
         <nav class="header-nav">
-          <router-link to="/" class="nav-link">工作台</router-link>
-          <router-link to="/channels" class="nav-link">渠道</router-link>
-          <router-link to="/history" class="nav-link">历史</router-link>
-          <router-link to="/settings" class="nav-link">设置</router-link>
+          <router-link to="/" class="nav-link" @click="menuOpen = false">工作台</router-link>
+          <router-link to="/channels" class="nav-link" @click="menuOpen = false">渠道</router-link>
+          <router-link to="/history" class="nav-link" @click="menuOpen = false">历史</router-link>
+          <router-link to="/prompts" class="nav-link" @click="menuOpen = false">提示词</router-link>
+          <router-link to="/settings" class="nav-link" @click="menuOpen = false">设置</router-link>
         </nav>
       </header>
+
+      <div v-if="menuOpen" class="menu-overlay" @click="menuOpen = false">
+        <nav class="mobile-menu" @click.stop>
+          <router-link to="/" class="mobile-nav-link" @click="menuOpen = false">工作台</router-link>
+          <router-link to="/channels" class="mobile-nav-link" @click="menuOpen = false">渠道</router-link>
+          <router-link to="/history" class="mobile-nav-link" @click="menuOpen = false">历史</router-link>
+          <router-link to="/prompts" class="mobile-nav-link" @click="menuOpen = false">提示词</router-link>
+          <router-link to="/settings" class="mobile-nav-link" @click="menuOpen = false">设置</router-link>
+        </nav>
+      </div>
 
       <main class="app-main">
         <router-view />
@@ -24,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useChannelStore } from "@/stores/channelStore";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { useHistoryStore } from "@/stores/historyStore";
@@ -32,6 +50,8 @@ import { useHistoryStore } from "@/stores/historyStore";
 const channelStore = useChannelStore();
 const settingsStore = useSettingsStore();
 const historyStore = useHistoryStore();
+
+const menuOpen = ref(false);
 
 onMounted(async () => {
   await Promise.all([
@@ -76,6 +96,27 @@ body,
   background: white;
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  padding-left: env(safe-area-inset-left, 12px);
+  padding-right: env(safe-area-inset-right, 12px);
+}
+
+.hamburger-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #4b5563;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.hamburger-btn:hover {
+  background: #f3f4f6;
 }
 
 .header-left {
@@ -125,5 +166,53 @@ body,
 .app-main {
   flex: 1;
   overflow: hidden;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  padding: 8px;
+  padding-top: env(safe-area-inset-top, 8px);
+}
+
+.mobile-menu {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-nav-link {
+  padding: 14px 20px;
+  text-decoration: none;
+  color: #1f2937;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.router-link-active {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+@media (max-width: 767px) {
+  .app-header {
+    padding: 10px 16px;
+  }
+
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .header-nav {
+    display: none;
+  }
 }
 </style>

@@ -93,6 +93,20 @@ export default defineConfig({
   },
   server: {
     port: 3558,
+    proxy: {
+      "/api/prompts": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+      "/api/auth": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+      "/api/save": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+    },
   },
   publicDir: "public",
 });

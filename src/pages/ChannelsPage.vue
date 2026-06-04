@@ -209,7 +209,7 @@ async function saveApiKey(channelId: string) {
 .no-tasks { font-size: 12px; color: #9ca3af; font-style: italic; }
 
 .card-api-key { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.api-key-row { display: flex; gap: 4px; flex: 1; min-width: 280px; }
+.api-key-row { display: flex; gap: 4px; flex: 1; min-width: 180px; }
 .api-key-input { flex: 1; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; }
 .btn-icon-sm { width: 28px; height: 28px; border: 1px solid #d1d5db; background: white; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
 .btn-icon-sm:hover { background: #f3f4f6; }
@@ -218,4 +218,52 @@ async function saveApiKey(channelId: string) {
 .btn-primary:hover { background: #2563eb; }
 .btn-secondary { padding: 10px 20px; background: white; color: #374151; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; cursor: pointer; }
 .btn-secondary:hover { background: #f9fafb; }
+
+@media (max-width: 767px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 16px 12px;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .channels-scroll {
+    padding: 0 16px 16px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .api-key-row {
+    flex-direction: column;
+    min-width: auto;
+  }
+
+  .card-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-api-key {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .editor-wrapper {
+    padding: 0;
+  }
+}
 </style>

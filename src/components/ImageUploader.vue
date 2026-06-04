@@ -1,9 +1,9 @@
 <template>
   <div class="image-uploader">
+    <input type="file" ref="fileInput" accept="image/*" multiple @change="handleFileSelect" style="display: none" />
     <div v-if="images.length === 0" class="drop-zone" @click="triggerUpload" @dragover.prevent @drop.prevent="handleDrop">
       <div class="upload-icon">📷</div>
       <p>点击或拖拽上传图片</p>
-      <input type="file" ref="fileInput" accept="image/*" multiple @change="handleFileSelect" style="display: none" />
     </div>
 
     <div v-else class="image-list">
@@ -128,6 +128,16 @@ function fileToDataUrl(file: File): Promise<string> {
   grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
   gap: 12px;
   margin-bottom: 12px;
+}
+
+@media (max-width: 767px) {
+  .image-list {
+    grid-template-columns: 1fr;
+  }
+
+  .drop-zone {
+    padding: 24px;
+  }
 }
 
 .image-item {

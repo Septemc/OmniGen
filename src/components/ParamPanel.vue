@@ -273,6 +273,22 @@ function removeTag(key: string, tag: string) {
   font-size: 14px;
 }
 
+.field-input input[type="text"],
+.field-input input[type="number"],
+.field-input select,
+.field-input button {
+  min-height: 44px;
+}
+
+@media (max-width: 767px) {
+  .field-input input[type="text"],
+  .field-input input[type="number"],
+  .field-input select,
+  .field-input textarea {
+    font-size: 16px;
+  }
+}
+
 .field-input textarea {
   resize: vertical;
 }

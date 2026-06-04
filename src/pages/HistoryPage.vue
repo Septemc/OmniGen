@@ -64,13 +64,6 @@
             <div v-else class="no-thumbnail">🖼️</div>
           </div>
 
-          <div v-if="item.status === 'success' && item.savedPaths && item.savedPaths.length > 0" class="item-saved-paths">
-            <span class="paths-label">保存路径：</span>
-            <div class="paths-list">
-              <span v-for="(p, i) in item.savedPaths" :key="i" class="path-tag">{{ p }}</span>
-            </div>
-          </div>
-
           <div v-if="item.status === 'failed' && item.errorMessage" class="item-error">
             {{ item.errorMessage }}
           </div>
@@ -316,6 +309,44 @@ async function deleteItem(id: string) {
   border-radius: 6px;
 }
 
+@media (max-width: 767px) {
+  .page-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 16px 12px;
+  }
+
+  .history-scroll {
+    padding: 0 16px 16px;
+  }
+
+  .item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .item-meta {
+    align-self: flex-start;
+  }
+
+  .item-actions {
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    padding: 8px 14px;
+  }
+
+  .preview-thumb {
+    width: 64px;
+    height: 64px;
+  }
+
+  .page-header h1 {
+    font-size: 20px;
+  }
+}
+
 .no-thumbnail {
   width: 80px;
   height: 80px;
@@ -352,35 +383,6 @@ async function deleteItem(id: string) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.item-saved-paths {
-  margin-bottom: 10px;
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-}
-
-.paths-label {
-  font-size: 12px;
-  color: #9ca3af;
-  line-height: 22px;
-  flex-shrink: 0;
-}
-
-.paths-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.path-tag {
-  font-size: 12px;
-  color: #065f46;
-  background: #d1fae5;
-  padding: 2px 8px;
-  border-radius: 4px;
-  word-break: break-all;
 }
 
 .item-error {

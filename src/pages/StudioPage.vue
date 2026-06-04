@@ -1,9 +1,16 @@
 <template>
   <div class="studio-page">
     <div class="studio-container">
-      <div class="left-panel">
+      <div v-show="showConfig" class="left-panel">
         <div class="panel-header">
           <h2>配置</h2>
+          <button
+            v-if="isMobile"
+            class="toggle-view-btn"
+            @click="viewMode = viewMode === 'config' ? 'preview' : 'config'"
+          >
+            {{ viewMode === 'config' ? '👁️ 预览' : '⚙️ 配置' }}
+          </button>
         </div>
 
         <div class="panel-scroll">
@@ -61,16 +68,25 @@
         </div>
       </div>
 
-      <div class="right-panel">
+      <div v-show="showPreview" class="right-panel">
         <div class="panel-header">
           <h2>结果预览</h2>
-          <button
-            class="toggle-preview-btn"
-            :title="showResultPreview ? '隐藏预览' : '显示预览'"
-            @click="showResultPreview = !showResultPreview"
-          >
-            {{ showResultPreview ? "👁️" : "🚫" }}
-          </button>
+          <div class="panel-header-actions">
+            <button
+              v-if="isMobile"
+              class="toggle-view-btn"
+              @click="viewMode = viewMode === 'preview' ? 'config' : 'preview'"
+            >
+              {{ viewMode === 'preview' ? '⚙️ 配置' : '👁️ 预览' }}
+            </button>
+            <button
+              class="toggle-preview-btn"
+              :title="showResultPreview ? '隐藏预览' : '显示预览'"
+              @click="showResultPreview = !showResultPreview"
+            >
+              {{ showResultPreview ? "👁️" : "🚫" }}
+            </button>
+          </div>
         </div>
         <div v-show="showResultPreview" class="result-area">
           <ResultPreview />
@@ -81,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, ref } from "vue";
+import { computed, watch, ref, onMounted, onUnmounted } from "vue";
 import { useChannelStore } from "@/stores/channelStore";
 import { useStudioStore } from "@/stores/studioStore";
 import ParamPanel from "@/components/ParamPanel.vue";
@@ -95,6 +111,19 @@ const channelStore = useChannelStore();
 const studio = useStudioStore();
 
 const showResultPreview = ref(true);
+const windowWidth = ref(window.innerWidth);
+const viewMode = ref<"config" | "preview">("config");
+
+function onResize() {
+  windowWidth.value = window.innerWidth;
+}
+
+onMounted(() => window.addEventListener("resize", onResize));
+onUnmounted(() => window.removeEventListener("resize", onResize));
+
+const isMobile = computed(() => windowWidth.value < 768);
+const showConfig = computed(() => !isMobile.value || viewMode.value === "config");
+const showPreview = computed(() => !isMobile.value || viewMode.value === "preview");
 
 const channels = computed(() => channelStore.channels);
 const currentChannelId = computed({
@@ -119,7 +148,6 @@ function buildInitialParams(task: typeof currentTask.value): Record<string, unkn
         params[field.key] = field.default;
       }
     }
-    // 如果 model 字段没有默认值，自动选第一个模型
     if (params.model === undefined && task.models && task.models.length > 0) {
       params.model = task.models[0].id;
     }
@@ -157,11 +185,9 @@ function onTaskChange(taskType: TaskType, subType?: string) {
 }
 
 function onParamChange(_values: Record<string, unknown>) {
-  // 参数已由 ParamPanel 更新到 studio，自动记忆
 }
 
 function onImagesChange() {
-  // 图片已由 ImageUploader 更新到 studio
 }
 
 function onExecute() {
@@ -187,6 +213,12 @@ watch(() => studio.params.model, (newModel) => {
   defaults.model = newId;
   studio.setParams(defaults);
   studio.loadModelParams();
+});
+
+watch(status, (newStatus) => {
+  if (isMobile.value && newStatus === "success") {
+    viewMode.value = "preview";
+  }
 });
 </script>
 
@@ -223,6 +255,27 @@ watch(() => studio.params.model, (newModel) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-view-btn {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #4b5563;
+  transition: background 0.2s;
+}
+
+.toggle-view-btn:hover {
+  background: #f3f4f6;
 }
 
 .toggle-preview-btn {
@@ -325,9 +378,34 @@ watch(() => studio.params.model, (newModel) => {
   cursor: not-allowed;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
   .studio-container {
     grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 8px;
+  }
+
+  .left-panel,
+  .right-panel {
+    border-radius: 8px;
+    height: 100%;
+  }
+
+  .panel-header {
+    padding: 12px 16px;
+  }
+
+  .panel-footer {
+    padding: 12px 16px;
+  }
+
+  .execute-btn {
+    padding: 14px 16px;
+  }
+
+  .task-tab {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 }
 </style>

@@ -195,7 +195,15 @@ export class ChannelRunner {
 
     for (const [key, value] of Object.entries(mappedInput)) {
       if (value === undefined || value === null) continue;
-      if (typeof value === "object" && !(value instanceof File)) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          if (typeof item === "object" && item !== null && !(item instanceof File)) {
+            formData.append(key, JSON.stringify(item));
+          } else {
+            formData.append(key, String(item));
+          }
+        }
+      } else if (typeof value === "object" && !(value instanceof File)) {
         formData.append(key, JSON.stringify(value));
       } else {
         formData.append(key, String(value));
@@ -235,7 +243,6 @@ export class ChannelRunner {
   ): Promise<{ files: string[]; thumbnails: string[]; savedPaths: string[] }> {
     const files: string[] = [];
     const thumbnails: string[] = [];
-    const savedPaths: string[] = [];
 
     for (const asset of assets) {
       try {
@@ -261,16 +268,11 @@ export class ChannelRunner {
           continue;
         }
 
+        asset.blob = blob;
+
         const blobResult = await FileSaver.saveFromBlob(blob, filename);
         asset.url = blobResult.url;
         files.push(blobResult.url);
-
-        try {
-          const serverResult = await FileSaver.saveToServer(blob, filename);
-          savedPaths.push(serverResult.path);
-        } catch (e) {
-          console.error("Failed to save to server:", e);
-        }
 
         if (asset.type !== "json") {
           try {
@@ -285,7 +287,7 @@ export class ChannelRunner {
       }
     }
 
-    return { files, thumbnails, savedPaths };
+    return { files, thumbnails, savedPaths: [] };
   }
 }
 

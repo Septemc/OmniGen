@@ -6,7 +6,7 @@
         v-model="prompt"
         class="prompt-input"
         placeholder="描述你想要生成的图像..."
-        rows="4"
+        :rows="isMobile ? 3 : 4"
       ></textarea>
     </div>
 
@@ -16,17 +16,28 @@
         v-model="negativePrompt"
         class="prompt-input"
         placeholder="描述你不想要出现的内容..."
-        rows="2"
+        :rows="isMobile ? 2 : 2"
       ></textarea>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
 import { useStudioStore } from "@/stores/studioStore";
 
 const studio = useStudioStore();
+
+const windowWidth = ref(window.innerWidth);
+
+function onResize() {
+  windowWidth.value = window.innerWidth;
+}
+
+onMounted(() => window.addEventListener("resize", onResize));
+onUnmounted(() => window.removeEventListener("resize", onResize));
+
+const isMobile = computed(() => windowWidth.value < 768);
 
 const prompt = computed({
   get: () => studio.prompt,
@@ -78,5 +89,11 @@ const negativePrompt = computed({
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+@media (max-width: 767px) {
+  .prompt-input {
+    font-size: 16px;
+  }
 }
 </style>

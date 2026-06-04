@@ -315,6 +315,21 @@ function handleImport(event: Event) {
 .form-field.full-width { grid-column: 1 / -1; }
 .form-field label { font-size: 12px; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
 .form-field input, .form-field select { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+
+@media (max-width: 767px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field input, .form-field select {
+    font-size: 16px;
+  }
+
+  .editor-body {
+    padding: 16px;
+  }
+}
+
 .form-field input:disabled { background: #f3f4f6; color: #9ca3af; }
 .toggle { display: flex; align-items: center; cursor: pointer; }
 .toggle input { display: none; }

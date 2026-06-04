@@ -263,7 +263,7 @@ export const DEFAULT_CHANNEL_TEMPLATES: Channel[] = [
           { key: "size", label: "输出尺寸", type: "select", apiField: "size", default: "1024x1024", options: SIZE_OPTIONS },
           { key: "steps", label: "推理步数", type: "slider", apiField: "num_inference_steps", min: 1, max: 50, step: 1, default: 28 },
           { key: "guidance", label: "引导强度", type: "slider", apiField: "guidance_scale", min: 0, max: 20, step: 0.1, default: 7.5 },
-          { key: "taskTypes", label: "参考图角色", type: "tags", apiField: "task_types", default: ["image"], description: "为多图编辑标记各图片角色" },
+          { key: "taskTypes", label: "参考图角色", type: "tags", apiField: "task_types", default: [], description: "标记各图片角色，可选值: ip / style / id" },
           { key: "loraWeights", label: "LoRA 权重", type: "json", apiField: "lora_weights", default: [], advanced: true, conditions: [{ when: "model", in: ["DreamO", "InstantCharacter"] }] },
         ],
       },

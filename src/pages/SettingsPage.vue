@@ -5,24 +5,13 @@
     </div>
     <div class="settings-scroll">
       <div class="settings-section">
-        <h3 class="section-title">保存路径</h3>
-        <div class="field-group">
-          <label>生成图片保存目录</label>
-          <div class="dir-row">
-            <span class="dir-path">📁 {{ settingsStore.outputPath }}</span>
-            <span class="dir-hint">（项目根目录下，文件持久保存）</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <h3 class="section-title">输出设置</h3>
+        <h3 class="section-title">下载设置</h3>
 
         <div class="field-group">
           <label>命名模板</label>
           <input v-model="settings.outputConfig.namingTemplate" type="text" class="text-input" />
           <p class="hint">
-            可用变量: {date} {time} {channel} {model} {prompt20}
+            可用变量: {date} {time} {channel} {model} {prompt20} — 用于下载文件命名
           </p>
         </div>
 
@@ -147,21 +136,23 @@ async function onSave() {
   background: #2563eb;
 }
 
-.dir-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+@media (max-width: 767px) {
+  .page-header {
+    padding: 16px 16px 12px;
+  }
+
+  .page-header h1 {
+    font-size: 20px;
+  }
+
+  .settings-scroll {
+    padding: 0 16px 16px;
+  }
+
+  .settings-section {
+    padding: 16px;
+  }
 }
 
-.dir-path {
-  font-size: 14px;
-  color: #374151;
-  font-weight: 500;
-}
 
-.dir-hint {
-  font-size: 13px;
-  color: #9ca3af;
-}
 </style>
