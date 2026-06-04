@@ -15,11 +15,15 @@ authRouter.post("/verify", (req, res) => {
   const configuredPassword = process.env.PROMPTS_PASSWORD;
 
   if (!configuredPassword) {
+    console.error("[auth] PROMPTS_PASSWORD 环境变量未设置");
     res.status(500).json({ error: "服务器未配置密码" });
     return;
   }
 
+  console.log(`[auth] 收到密码长度=${password.length}, 配置密码长度=${configuredPassword.length}`);
+
   if (password !== configuredPassword) {
+    console.log(`[auth] 密码不匹配 — 输入密码前3位: "${password.slice(0, 3)}"`);
     res.status(401).json({ error: "密码错误" });
     return;
   }

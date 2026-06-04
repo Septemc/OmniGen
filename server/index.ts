@@ -9,6 +9,10 @@ import { authMiddleware } from "./middleware/auth.js";
 const app = express();
 const PORT = parseInt(process.env.PORT || "3001", 10);
 
+console.log(`[startup] PROMPTS_PASSWORD=${process.env.PROMPTS_PASSWORD ? "已设置(" + process.env.PROMPTS_PASSWORD.length + "字符)" : "未设置!"}`);
+console.log(`[startup] PORT=${PORT}`);
+console.log(`[startup] PROMPTS_DIR=${process.env.PROMPTS_DIR || "(default)"}`);
+
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 
